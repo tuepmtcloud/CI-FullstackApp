@@ -15,23 +15,26 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      matrix:
+        node-version: [16.x, 18.x]
 
     steps:
       # Check out the code from the repository.
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       # Set up a Node.js environment using the specified node version.
       - uses: actions/setup-node@v3
         with:
-          node-version: [16, 18]
+          node-version: ${{ matrix.node-version }}
 
       # Install the dependencies.
-      - run: npm install -y
+      - run: cd backend && npm ci
 
       # Run the tests.
-      - run: npm test
+      - run: cd backend && npm test
 
       # Run the linter.
-      - run: npm lint
+      - run: cd backend && npm run lint
 
       # Send a console message at completion.
       - run: |
